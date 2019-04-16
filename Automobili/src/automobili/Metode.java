@@ -3,6 +3,7 @@ package automobili;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Metode {
@@ -52,6 +53,51 @@ public class Metode {
 	}
 	
 	
+	public Marke vratimarkuAutomobila(int id) {
+		
+		Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		Marke marke = new Marke();
+		try {
+			konekcija = konektujSe("automobili");
+			String query = "SELECT * FROM marke WHERE id_marke = ?";
+			pst = konekcija.prepareStatement(query);
+			pst.setInt(1, id);
+			res = pst.executeQuery();
+			while(res.next()) {
+				marke.setIdMarke(res.getInt("id_marke"));
+				marke.setImeMarke(res.getString("naziv_marke"));
+				marke.setZemlja(res.getString("zemlja"));
+			}
+			return marke;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
 	
 	
 	
